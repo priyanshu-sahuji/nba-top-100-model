@@ -54,7 +54,7 @@ Adjustments are made only for:
 - You can compare any two players and visualize their metrics side by side.
 
 ## 🏀 Heatmap of Top 100 NBA Players
-![Top 100 Results Heatmap](https://raw.githubusercontent.com/priyanshu-sahuji/nba-top-100-model/main/Results.jpg)
+![Top 100 Results Heatmap](https://github.com/priyanshu-sahuji/nba-top-100-model/blob/main/Reuslts.jpg?raw=true)
 
 
 ---
