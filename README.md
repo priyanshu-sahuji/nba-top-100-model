@@ -35,7 +35,7 @@ pip install -r requirements.txt
 ```bash
 streamlit run top_100_nba_model.py
 ```
-3. Upload or use the existing `players_stats.csv` file.
+3. Use the format `sample_players_stats.csv` file.
 
 ## 📊 KPI Weightings
 The score is calculated using a weighted combination of KPIs such as:
@@ -58,5 +58,5 @@ Adjustments are made only for:
 
 ---
 
-Built with ❤️ by Priyanshu Sahu.
+Built with ❤️ for Basketball by Priyanshu Sahu.
 
