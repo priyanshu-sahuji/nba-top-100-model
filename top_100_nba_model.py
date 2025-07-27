@@ -64,25 +64,14 @@ def normalize_kpis(df):
     return df
 
 def apply_compensation_factors(df):
-    """Applies era, ABA, and height compensation factors to each player."""
+    """Applies era and height compensation factors to each player. ABA adjustment removed."""
     def era_adjustment(year):
         if year >= 1982:
             return 1.00
         elif year >= 1975:
             return 0.96
-        elif year >= 1965:
-            return 0.87
-        elif year >= 1955:
-            return 0.75
         else:
-            return 0.60
-
-    def aba_adjustment(player):
-        if player == 'Artis Gilmore':
-            return 0.80
-        elif player in ['Julius Erving', 'Rick Barry']:
-            return 0.95
-        return 1.00
+            return 0.87
 
     def height_adjustment(height):
         if height <= 72:
@@ -94,9 +83,8 @@ def apply_compensation_factors(df):
         return 1.00
 
     df['Era_Factor'] = df['Peak_Year'].apply(era_adjustment)
-    df['ABA_Factor'] = df['Player'].apply(aba_adjustment)
     df['Height_Factor'] = df['Height'].apply(height_adjustment)
-    df['Compensation'] = df['Era_Factor'] * df['ABA_Factor'] * df['Height_Factor']
+    df['Compensation'] = df['Era_Factor'] * df['Height_Factor']
     return df
 
 def compute_scores(df):
