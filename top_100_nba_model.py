@@ -12,6 +12,8 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.impute import SimpleImputer
 import streamlit as st
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # ----------------------
 # KPI Configuration
@@ -72,7 +74,9 @@ def apply_compensation_factors(df):
     return df
 
 def compute_scores(df):
-    df['Score'] = sum(df[kpi] * weight for kpi, weight in KPI_WEIGHTS.items())
+    for kpi, weight in KPI_WEIGHTS.items():
+        df[f'{kpi}_Weighted'] = df[kpi] * weight
+    df['Score'] = df[[f'{kpi}_Weighted' for kpi in KPI_WEIGHTS]].sum(axis=1)
     df['Score'] *= df['Compensation']
     return df
 
@@ -86,8 +90,9 @@ def rank_top_players(df, top_n=100):
 # ----------------------
 
 def launch_interface(df):
+    st.set_page_config(page_title="Top 100 NBA Players", layout="wide")
     st.title("🏀 Top 100 NBA Players of All Time")
-    st.markdown("This model ranks players using data-driven performance metrics and retroactive compensation.")
+    st.markdown("A data-driven ranking model blending accolades, stats, and historical context.")
 
     st.sidebar.header("🔍 Compare Players")
     players = df['Player'].tolist()
@@ -96,12 +101,32 @@ def launch_interface(df):
 
     if p1 != p2:
         comparison = df[df['Player'].isin([p1, p2])].set_index('Player')
-        st.write("### Player Comparison")
+        st.subheader("🔄 Player Comparison")
         st.dataframe(comparison[['Score'] + KPI_COLUMNS])
 
-    st.write("### Full Rankings")
+        st.subheader("📈 KPI Radar Chart")
+        plot_radar_chart(comparison, KPI_COLUMNS)
+
+    st.subheader("🏆 Top 100 Player Rankings")
     st.dataframe(df[['Rank', 'Player', 'Score'] + KPI_COLUMNS])
-    st.bar_chart(df.set_index('Player')['Score'].head(10))
+
+    st.subheader("📊 Top 10 Player Scores")
+    fig, ax = plt.subplots()
+    top10 = df.head(10).set_index('Player')
+    top10['Score'].plot(kind='bar', ax=ax)
+    ax.set_ylabel("Score")
+    ax.set_title("Top 10 Player Scores")
+    st.pyplot(fig)
+
+def plot_radar_chart(df, kpis):
+    import plotly.graph_objects as go
+    df = df[kpis]
+    categories = list(df.columns)
+    fig = go.Figure()
+    for idx, row in df.iterrows():
+        fig.add_trace(go.Scatterpolar(r=row.values, theta=categories, fill='toself', name=idx))
+    fig.update_layout(polar=dict(radialaxis=dict(visible=True)), showlegend=True)
+    st.plotly_chart(fig, use_container_width=True)
 
 # ----------------------
 # Main
