@@ -53,10 +53,11 @@ Adjustments are made only for:
 - Data focuses strictly on NBA players post-1975.
 - You can compare any two players and visualize their metrics side by side.
 
-## 📌 Example Visualization
-![Radar Comparison Sample](sample_radar_chart.png)
+## 🏀 Heatmap of Top 100 NBA Players
+![Top 100 Results Heatmap](https://raw.githubusercontent.com/priyanshu-sahuji/nba-top-100-model/main/Results.jpg)
+
 
 ---
 
-Built with ❤️ for Basketball by Priyanshu Sahu.
+Built with ❤️ for 🏀 by Priyanshu Sahu.
 
